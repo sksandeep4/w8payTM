@@ -12,3 +12,31 @@
   1. In index.js file, route all the requests to /api/v1 to an apiRouter defined in backend/routes/index.js
   2. Create a new file backend/routes/index.js that exports a new express router
   3. Import the router in index.js and route all the request from /api/v1 to it
+
+- Step 4 - Route User Requests
+
+  1. Create a new User Router in backend/routes/user.js and import it
+  2. Route all requests that go to /api/v1/user to the User Router
+  3. Create routes for the User Router to handle requests
+
+- Step 5 - Add cors, Body Parser and jsonwebtoken
+
+  1. Add cors
+     1.1. npm i cors in /backend
+     1.2. in backend/index.js, import it and app.use(cors())
+  2. Add body-parser
+     2.1. in backend/index.js, import it and app.use(express.json())
+  3. Add jsonwebtoken
+     3.1. npm i jsonwebtoken in /backend
+  4. Export JWT_SECRET
+     4.1. Export a JWT_SECRET from a new file backend/config.js
+  5. Listen on port 8080
+
+- Step 6 - Add backend auth routes
+
+  1.  1.1.
+      1.2.
+  2.  2.1.
+  3.  3.1.
+  4.  4.1.
+  5.
