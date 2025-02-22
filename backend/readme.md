@@ -61,26 +61,26 @@
          3. body:{password, firstName, lastName}
      
   
-  - Step 7 - Middleware
+- Step 7 - Middleware
 
-    Now we have a user account, we need to gate routes which only authenticated users can hit
-    For this, we need to introduce a auth middleware
+  Now we have a user account, we need to gate routes which only authenticated users can hit
+  For this, we need to introduce a auth middleware
 
-    Create a middleware.js file that exports an authMiddleware function
-       1. Checks the headers for an authorization header (Bearer <token>)
-       2. Verifies that the token is valid
-       3. Puts the userId in the request object if the token checks out.
-       4. If not, return a 403 status error back 
+  Create a middleware.js file that exports an authMiddleware function
+     1. Checks the headers for an authorization header (Bearer <token>)
+     2. Verifies that the token is valid
+     3. Puts the userId in the request object if the token checks out.
+     4. If not, return a 403 status error back 
 
-  - Step 8 - Create the last 2 routes in User
+- Step 8 - Create the last 2 routes in User
 
-  - Step 9 - Create Bank related Schema
+- Step 9 - Create Bank related Schema
 
-    1. Update the db.js to add one more Schema and export the models 
-    2. Accounts Table - Will contain the INR balances of a user
-    3. Schema - {
-      userId: ObjectId/String,
-      balance: float/number
-    }
-    4. We should reference the Users table in the Schema
+  1. Update the db.js to add one more Schema and export the models 
+  2. Accounts Table - Will contain the INR balances of a user
+  3. Schema - {
+    userId: ObjectId/String,
+    balance: float/number
+  }
+  4. We should reference the Users table in the Schema
 
