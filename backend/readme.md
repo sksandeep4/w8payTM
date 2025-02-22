@@ -34,7 +34,30 @@
 
 - Step 6 - Add backend auth routes
 
-  1.
-  2.
-  3.
-  4.
+  1. In the user router, add 3 routes
+     1. SignUp
+     1. This route needs to get information, do input validation using zod and store the information in the db provided
+     1. Inputs are correct(validated through zod)
+     1. Database doesn't already contain another user
+     1. API Details
+     1. Method: POST
+     1. Route: /api/v1/user/signup
+     1. Body: {username, firstName, lastName, password }
+     1. Response: {message:"User created successfully", token: "jwt"}
+     1. SignIn
+     1. API Details
+     1. Method: POST
+     1. Route: /api/v1/user/signin
+     1. Body: {username, password }
+
+  - Step 6 - Add backend auth routes
+
+    Now we have a user account, we need to gate routes which only authenticated users can hit
+    For this, we need to introduce a auth middleware
+
+    Create a middleware.js file that exports an authMiddleware function
+
+    1.  Checks the headers for an authorization header (Bearer <token>)
+    2.  Verifies that the token is valid
+    3.  Puts the userId in the request object if the token checks out.
+    4.  If not, return a 403 status error back to the user
