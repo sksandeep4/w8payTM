@@ -132,19 +132,33 @@ Here We will be writing a bunch of APIs for the core user balances. There are 2 
       3. Body: { to: String, amount: Number }
 
   This second endpoint can be done in 2 ways
-  1. The bad solution
-    1. Get the fromAccount details and find if fromAccount has sufficient balance
-    2. Check if toAccount exists, if not res.status(404).json({msg: "Recipient does not exist"})
-    3. If so, update the two accounts
-      1. await Account.updateOne({userId: req.userId},{$inc:{balance: -amount}})
-      2. await Account.updateOne({userId: toAccount},{$inc:{balance: amount}})
-      3. res.status(200).json({msg: Transfer was successful})
-  2. The right solution - using transactions in MongoDB
-    1. start a session - await mongoose.startSession()
-    2. start a transaction - session.startTransaction()
-    3. Fetch Accounts within the transaction
-    4. Perform existence checks
-    5. Perform Sufficient balance checks
-    6. Perform the transfer 
-    7. Commit the transaction - await session.commitTransaction()
+
+ ## The Bad Solution
+
+1. Get the `fromAccount` details and check if it has sufficient balance.
+2. Check if the `toAccount` exists:
+    - If not, return `res.status(404).json({ msg: "Recipient does not exist" })`.
+3. If the `toAccount` exists:
+    - Update both accounts:
+        - `await Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount } })`
+        - `await Account.updateOne({ userId: toAccount }, { $inc: { balance: amount } })`
+4. Return success message:
+    - `res.status(200).json({ msg: "Transfer was successful" })`.
+
+## The Right Solution - Using Transactions in MongoDB
+
+1. Start a session:
+    - `await mongoose.startSession()`
+2. Start a transaction:
+    - `session.startTransaction()`
+3. Fetch accounts within the transaction.
+4. Perform existence checks:
+    - Ensure both the `fromAccount` and `toAccount` exist.
+5. Perform sufficient balance checks:
+    - Ensure `fromAccount` has enough balance.
+6. Perform the transfer:
+    - Decrease balance in `fromAccount` and increase balance in `toAccount`.
+7. Commit the transaction:
+    - `await session.commitTransaction()`
+
 
