@@ -116,3 +116,34 @@
 1. Create a new router
   All balances should go to a different express router (that handles all requests to /api/v1/account)
   Create a account router in routes/account.js, export it and do the app.use('/account', accountRouter)
+
+
+- Step 13 - Balance and Transfer Endpoints
+
+Here We will be writing a bunch of APIs for the core user balances. There are 2 endpoints we need to implement
+
+  1. An endpoint for the user to get their balance
+    1. Method: GET
+    2. Route: /api/v1/account/balance
+    3. Response: status code 200 { balance: 200 }
+  2. An endpoint for the user to transfer money to another account
+    1. Method: POST
+    2. Route: /api/v1/account/transfer
+    3. Body: { to: String, amount: Number }
+  This second endpoint can be done in 2 ways
+  1. The bad solution
+    1. Get the fromAccount details and find if fromAccount has sufficient balance
+    2. Check if toAccount exists, if not res.status(404).json({msg: "Recipient does not exist"})
+    3. If so, update the two accounts
+      1. await Account.updateOne({userId: req.userId},{$inc:{balance: -amount}})
+      2. await Account.updateOne({userId: toAccount},{$inc:{balance: amount}})
+      3. res.status(200).json({msg: Transfer was successful})
+  2. The right solution - using transactions in MongoDB
+    1. start a session - await mongoose.startSession()
+    2. start a transaction - session.startTransaction()
+    3. Fetch Accounts within the transaction
+    4. Perform existence checks
+    5. Perform Sufficient balance checks
+    6. Perform the transfer 
+    7. Commit the transaction - await session.commitTransaction()
+
