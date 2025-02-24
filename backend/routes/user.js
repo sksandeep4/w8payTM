@@ -82,8 +82,20 @@ router.put("/", authMiddleware, async (req, res) => {
   if (!success) {
     res.status(411).json({ msg: "Wrong format inputs" });
   }
-  await User.updateOne(body, { id: req.userId });
-  res.status(200).json({ msg: "User updated successfully" });
+  console.log(req.userId);
+  try {
+    const updateResult = await User.updateOne(
+      { _id: req.userId },
+      { $set: body }
+    );
+    if (updateResult.nModified === 0) {
+      return res.status(404).json({ msg: "No user found or no changes made" });
+    }
+    res.status(200).json({ msg: "User updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "An error occurred while updating the user" });
+  }
 });
 
 router.get("/bulk", async (req, res) => {
