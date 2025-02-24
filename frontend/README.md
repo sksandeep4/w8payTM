@@ -1,8 +1,16 @@
-# React + Vite
+# Frontend Development
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Step 1 - Add routing to the react app
 
-Currently, two official plugins are available:
+Import `react-router-dom` to your project and add the following routes
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. `/signup` - The Sign Up Page
+2. `/signin` - The Sign In Page
+3. `/dashboard` - Balances and see other users on the platform
+4. `/send` - Send money to other users
+
+## Step 2 - Add Tailwind to the project
+
+1. `npm install tailwindcss @tailwindcss/vite`
+2. Add the `@tailwindcss/vite` plugin to your Vite configuration.
+3. Add an `@import` to your CSS file that imports Tailwind CSS.
