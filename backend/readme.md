@@ -1,164 +1,165 @@
 // We need 3 routes for user authentication - signup, signin and update info(fName, lName and password)
+# User Authentication and Account Management
 
-- Step 2 - Mongoose schema for User Table
+## Step 2 - Mongoose Schema for User Table
 
-  1. Create a db.js in the root folder
-  2. Import mongoose and connect to the database
-  3. Create mongoose schema for Users table
-  4. Export the Model from the file
+1. Create a `db.js` in the root folder.
+2. Import mongoose and connect to the database.
+3. Create mongoose schema for Users table.
+4. Export the Model from the file.
 
-- Step 3 - Creating route file structure
+## Step 3 - Creating Route File Structure
 
-  1. In index.js file, route all the requests to /api/v1 to an apiRouter defined in backend/routes/index.js
-  2. Create a new file backend/routes/index.js that exports a new express router
-  3. Import the router in index.js and route all the request from /api/v1 to it
+1. In `index.js` file, route all the requests to `/api/v1` to an `apiRouter` defined in `backend/routes/index.js`.
+2. Create a new file `backend/routes/index.js` that exports a new express router.
+3. Import the router in `index.js` and route all the requests from `/api/v1` to it.
 
-- Step 4 - Route User Requests
+## Step 4 - Route User Requests
 
-  1. Create a new User Router in backend/routes/user.js and import it
-  2. Route all requests that go to /api/v1/user to the User Router
-  3. Create routes for the User Router to handle requests
+1. Create a new User Router in `backend/routes/user.js` and import it.
+2. Route all requests that go to `/api/v1/user` to the User Router.
+3. Create routes for the User Router to handle requests.
 
-- Step 5 - Add cors, Body Parser and jsonwebtoken
+## Step 5 - Add CORS, Body Parser and JSON Web Token
 
-  1. Add cors
-     1. npm i cors in /backend
-     2. in backend/index.js, import it and app.use(cors())
-  2. Add body-parser
-     1. in backend/index.js, import it and app.use(express.json())
-  3. Add jsonwebtoken
-     1. npm i jsonwebtoken in /backend
-  4. Export JWT_SECRET
-     1. Export a JWT_SECRET from a new file backend/config.js
-  5. Listen on port 8080
+1. **Add CORS**
+   1. Run `npm i cors` in `/backend`.
+   2. In `backend/index.js`, import it and use it with `app.use(cors())`.
+   
+2. **Add Body-Parser**
+   1. In `backend/index.js`, import it and use it with `app.use(express.json())`.
+   
+3. **Add JSON Web Token**
+   1. Run `npm i jsonwebtoken` in `/backend`.
 
-- Step 6 - Add backend auth routes
+4. **Export JWT_SECRET**
+   1. Export a JWT_SECRET from a new file `backend/config.js`.
 
-  1. In the user router, add 3 routes
-     1. SignUp
-       1. This route needs to get information, do input validation using zod and store the information in the db provided
-         1. Inputs are correct(validated through zod)
-         2. Database doesn't already contain another user
-       2. API Details
-         1. Method: POST
-         2. Route: /api/v1/user/signup
-         3. Body: {username, firstName, lastName, password }
-         4. Response: {message:"User created successfully", token: "jwt"}
-     2. SignIn
-       1. API Details
-         1. Method: POST
-         2. Route: /api/v1/user/signin
-         3. Body: {username, password }
-     3. get Users based on filterTerm
-       1. API Details
-         1. Method: GET
-         2. Route: /api/v1/user/bulk
-         3. query params : bulk?filter=sand
-     4. Update user details
-       1. API Details
-         1. Method: PUT
-         2. Route: /api/v1/user/
-         3. body:{password, firstName, lastName}
-     
-  
-- Step 7 - Middleware
+5. **Listen on Port 8080**
 
-  Now we have a user account, we need to gate routes which only authenticated users can hit
-  For this, we need to introduce a auth middleware
+## Step 6 - Add Backend Auth Routes
 
-  Create a middleware.js file that exports an authMiddleware function
-     1. Checks the headers for an authorization header (Bearer <token>)
-     2. Verifies that the token is valid
-     3. Puts the userId in the request object if the token checks out.
-     4. If not, return a 403 status error back 
+1. In the user router, add 3 routes:
+   - **SignUp**
+     1. This route needs to get information, do input validation using Zod, and store the information in the DB.
+     2. Inputs are validated through Zod.
+     3. Database doesn't already contain another user.
+     4. **API Details:**
+        - Method: `POST`
+        - Route: `/api/v1/user/signup`
+        - Body: `{ username, firstName, lastName, password }`
+        - Response: `{ message: "User created successfully", token: "jwt" }`
+   
+   - **SignIn**
+     1. **API Details:**
+        - Method: `POST`
+        - Route: `/api/v1/user/signin`
+        - Body: `{ username, password }`
 
-- Step 8 - Create the last 2 routes in User
+   - **Get Users Based on `filterTerm`**
+     1. **API Details:**
+        - Method: `GET`
+        - Route: `/api/v1/user/bulk`
+        - Query params: `bulk?filter=sand`
 
-- Step 9 - Create Bank related Schema
+   - **Update User Details**
+     1. **API Details:**
+        - Method: `PUT`
+        - Route: `/api/v1/user/`
+        - Body: `{ password, firstName, lastName }`
 
-  1. Update the db.js to add one more Schema and export the models 
-  2. Accounts Table - Will contain the INR balances of a user
-  3. Schema - {
-    userId: ObjectId/String,
-    balance: float/number
-  }
-  4. We should reference the Users table in the Schema
+## Step 7 - Middleware
 
+Now that we have a user account, we need to gate routes that only authenticated users can hit. For this, we need to introduce an authentication middleware.
 
-- Step 10 - Transactions in databases
+1. Create a `middleware.js` file that exports an `authMiddleware` function:
+   - **Checks the headers** for an authorization header (Bearer `<token>`).
+   - **Verifies** that the token is valid.
+   - **Puts the `userId`** in the request object if the token checks out.
+   - **If not**, return a 403 status error back.
 
-  A lot of times, we want the multiple database transactions to be atomic
-  Either All of them should update, or none of them should
+## Step 8 - Create the Last 2 Routes in User
 
-  This is super important in case of a bank
-  
-  Things to worry about 
-  1. What if the DB crashes right after the first request (Only balance is changed for sender and not for recipient)
-  2. What if the Node.js server crashes after the first update?
+Add the last two routes for handling user-specific functionality.
 
-    It would lead to a database inconsistency. Amount would get debited from the sender and not credited for the recipient.
-    If a failure ever happens, the first transaction should rollback
-    This is what is called a transaction in a database, We need to implement a transaction on the next set of endpoints that allow users to transfer INR 
+## Step 9 - Create Bank Related Schema
 
-- Step 11 - Initialize balances on signup
+1. Update `db.js` to add one more Schema and export the models.
+2. **Accounts Table** - Will contain the INR balances of a user.
+3. **Schema:**
+   ```js
+   {
+     userId: ObjectId/String,
+     balance: Float/Number
+   }
+4. We should reference the Users table in the Schema.
 
-  Update the signup endpoint to give the user a random balance between 1 and 10000.
-  This is so we don't have to integrate with banks and give them random balances to start with.
+## Step 10 - Transactions in Databases
 
-  In signup route, after creating user with userId and before signing a JWT token, Create a new account 
-  await Account.create({
-    userId
-    balance: 1 + Math.random() * 10000
-  })
+A lot of times, we want multiple database transactions to be atomic. Either all of them should update, or none of them should. This is critical in case of a bank.
 
-- Step 12 - Create a new router for accounts
+### Things to Worry About:
+1. **What if the DB crashes** right after the first request? (Only balance is changed for sender and not for recipient)
+2. **What if the Node.js server crashes** after the first update?
 
-1. Create a new router
-  All balances should go to a different express router (that handles all requests to /api/v1/account)
-  Create a account router in routes/account.js, export it and do the app.use('/account', accountRouter)
+This would lead to a database inconsistency where the amount would get debited from the sender but not credited for the recipient. If a failure ever happens, the first transaction should rollback.
 
+This is what is called a transaction in a database. We need to implement a transaction on the next set of endpoints that allow users to transfer INR.
 
-- Step 13 - Balance and Transfer Endpoints
+## Step 11 - Initialize Balances on Signup
 
-Here We will be writing a bunch of APIs for the core user balances. There are 2 endpoints we need to implement
+Update the signup endpoint to give the user a random balance between 1 and 10,000. This is so we don't have to integrate with actual banks and can give them random balances to start with.
 
-  1. An endpoint for the user to get their balance
-      1. Method: GET
-      2. Route: /api/v1/account/balance
-      3. Response: status code 200 { balance: 200 }
-  2. An endpoint for the user to transfer money to another account
-      1. Method: POST
-      2. Route: /api/v1/account/transfer
-      3. Body: { to: String, amount: Number }
+1. In the signup route, after creating the user with `userId` and before signing the JWT token, create a new account:
+   ```js
+   await Account.create({
+     userId,
+     balance: 1 + Math.random() * 10000
+   });
 
-  This second endpoint can be done in 2 ways
+## Step 12 - Create a New Router for Accounts
 
- ## The Bad Solution
+1. **Create a new router**:
+   - All balance-related actions should go to a different express router (that handles all requests to `/api/v1/account`).
+   - Create an `accountRouter` in `routes/account.js`, export it, and add the following in `index.js`:
+     ```js
+     app.use('/account', accountRouter);
+     ```
 
-1. Get the `fromAccount` details and check if it has sufficient balance.
-2. Check if the `toAccount` exists:
-    - If not, return `res.status(404).json({ msg: "Recipient does not exist" })`.
-3. If the `toAccount` exists:
-    - Update both accounts:
-        - `await Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount } })`
-        - `await Account.updateOne({ userId: toAccount }, { $inc: { balance: amount } })`
-4. Return success message:
-    - `res.status(200).json({ msg: "Transfer was successful" })`.
+## Step 13 - Balance and Transfer Endpoints
 
-## The Right Solution - Using Transactions in MongoDB
+Here we will be writing a bunch of APIs for core user balances. There are two endpoints we need to implement:
 
-1. Start a session:
-    - `await mongoose.startSession()`
-2. Start a transaction:
-    - `session.startTransaction()`
-3. Fetch accounts within the transaction.
-4. Perform existence checks:
-    - Ensure both the `fromAccount` and `toAccount` exist.
-5. Perform sufficient balance checks:
-    - Ensure `fromAccount` has enough balance.
-6. Perform the transfer:
-    - Decrease balance in `fromAccount` and increase balance in `toAccount`.
-7. Commit the transaction:
-    - `await session.commitTransaction()`
+1. **An endpoint for the user to get their balance:**
+   - **Method**: `GET`
+   - **Route**: `/api/v1/account/balance`
+   - **Response**: 
+     - Status code: `200`
+     - `{ balance: 200 }`
 
+2. **An endpoint for the user to transfer money to another account:**
+   - **Method**: `POST`
+   - **Route**: `/api/v1/account/transfer`
+   - **Body**: `{ to: String, amount: Number }`
+
+### This second endpoint can be done in two ways:
+
+1. **The Bad Solution**
+   1. Get the `fromAccount` details and find if `fromAccount` has sufficient balance.
+   2. Check if `toAccount` exists. If not, return `res.status(404).json({ msg: "Recipient does not exist" })`.
+   3. If so, update both accounts:
+      ```js
+      await Account.updateOne({ userId: req.userId }, { $inc: { balance: -amount } });
+      await Account.updateOne({ userId: toAccount }, { $inc: { balance: amount } });
+      res.status(200).json({ msg: "Transfer was successful" });
+      ```
+
+2. **The Right Solution - Using Transactions in MongoDB**
+   1. Start a session: `await mongoose.startSession()`.
+   2. Start a transaction: `session.startTransaction()`.
+   3. Fetch accounts within the transaction.
+   4. Perform existence checks.
+   5. Perform sufficient balance checks.
+   6. Perform the transfer.
+   7. Commit the transaction: `await session.commitTransaction()`.
 
