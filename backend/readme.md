@@ -123,13 +123,14 @@
 Here We will be writing a bunch of APIs for the core user balances. There are 2 endpoints we need to implement
 
   1. An endpoint for the user to get their balance
-    1. Method: GET
-    2. Route: /api/v1/account/balance
-    3. Response: status code 200 { balance: 200 }
+      1. Method: GET
+      2. Route: /api/v1/account/balance
+      3. Response: status code 200 { balance: 200 }
   2. An endpoint for the user to transfer money to another account
-    1. Method: POST
-    2. Route: /api/v1/account/transfer
-    3. Body: { to: String, amount: Number }
+      1. Method: POST
+      2. Route: /api/v1/account/transfer
+      3. Body: { to: String, amount: Number }
+
   This second endpoint can be done in 2 ways
   1. The bad solution
     1. Get the fromAccount details and find if fromAccount has sufficient balance
