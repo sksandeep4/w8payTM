@@ -84,3 +84,35 @@
   }
   4. We should reference the Users table in the Schema
 
+
+- Step 10 - Transactions in databases
+
+  A lot of times, we want the multiple database transactions to be atomic
+  Either All of them should update, or none of them should
+
+  This is super important in case of a bank
+  
+  Things to worry about 
+  1. What if the DB crashes right after the first request (Only balance is changed for sender and not for recipient)
+  2. What if the Node.js server crashes after the first update?
+
+    It would lead to a database inconsistency. Amount would get debited from the sender and not credited for the recipient.
+    If a failure ever happens, the first transaction should rollback
+    This is what is called a transaction in a database, We need to implement a transaction on the next set of endpoints that allow users to transfer INR 
+
+- Step 11 - Initialize balances on signup
+
+  Update the signup endpoint to give the user a random balance between 1 and 10000.
+  This is so we don't have to integrate with banks and give them random balances to start with.
+
+  In signup route, after creating user with userId and before signing a JWT token, Create a new account 
+  await Account.create({
+    userId
+    balance: 1 + Math.random() * 10000
+  })
+
+- Step 12 - Create a new router for accounts
+
+1. Create a new router
+  All balances should go to a different express router (that handles all requests to /api/v1/account)
+  Create a account router in routes/account.js, export it and do the app.use('/account', accountRouter)
