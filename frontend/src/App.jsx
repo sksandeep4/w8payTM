@@ -15,7 +15,7 @@ function App() {
           <Route path="/send" element={<SendMoney />} />
         </Routes>
       </BrowserRouter>
-      <p className="font-bold">Hello Waruldo</p>
+      {/* <p className="font-bold">Hello Waruldo</p> */}
     </div>
   );
 }
